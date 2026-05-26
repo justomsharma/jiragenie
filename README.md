@@ -21,38 +21,7 @@ JiraGenie wraps both problems behind a natural-language interface. An LLM parses
 
 ## How it works
 
-```
-   user input
-       │
-       ▼
-┌─────────────────┐
-│ intent_parser   │  ── GPT-4o-mini → structured JSON
-│  {action,        │     {action: "move_issue",
-│   target, ...}   │      issue_key: "ENG-142",
-└─────────────────┘      destination: "done"}
-       │
-       ▼
-┌─────────────────┐
-│ cli dispatcher  │  ── route to create / move / comment
-└─────────────────┘
-       │
-       ▼
-┌─────────────────┐
-│ workflow walker │  ── BFS through valid transitions toward
-│ + loop guard    │     destination; prefers "in progress"
-│                 │     category over terminal states
-└─────────────────┘
-       │
-       ▼
-┌─────────────────┐
-│ repair engine   │  ── on 400: parse missing fields,
-│                 │     auto-fill (duedate, description,
-│                 │     timetracking), retry transition
-└─────────────────┘
-       │
-       ▼
-   Jira REST API
-```
+![JiraGenie execution flow](docs/architecture.png)
 
 ### Three design ideas worth noting
 
